@@ -1,0 +1,89 @@
+```{r}
+# Read the data from the CSV file
+NFL2020 = read.csv("~/Desktop/learnR/NFL2020.csv")
+
+# Find all salaries >= $1000000
+indices_1M = which(NFL2020$Salary >= 1000000)
+length(indices_1M) # 762 players make at least $ 1 M
+
+# Scale the salaries to closest $ .1 million
+scaled_salaries = NFL2020$Salary[1:length(indices_1M)] / 1000000
+scaled_salaries = round(scaled_salaries, digits=1)
+
+# Create a histogram
+pdf("all_salaries.pdf")
+hist(scaled_salaries, 
+     breaks=5,
+     main="Big Buck Earners", 
+     xlab = "Football Player Salaries ($ .1 M)")
+dev.off()
+```
+```{r}
+min_salary = min(NFL2020$Salary)
+min_salary # $ 75600 is the minimum salary
+indices_lowest = which(NFL2020$Salary == min_salary)
+names_lowest_salary = NFL2020$Player[indices_lowest]
+names_lowest_salary # Trevor\\DaniTr00 has the minimum salary
+how_many_lowest_salary = length(names_lowest_salary)
+how_many_lowest_salary # 1 player only makes that minimum salary
+```
+```{r}
+how_many_above_10M = length(which(NFL2020$Salary > 10000000))
+how_many_above_10M # 62 players earn above $ 10 M
+```
+```{r}
+# Indices of teams KAN and GNB
+KAN_indices = which(NFL2020$Tm == "KAN")
+GNB_indices = which(NFL2020$Tm == "GNB")
+
+# Summation of Salaries of KAN and GNB players
+KAN_salary_sum = sum(NFL2020$Salary[KAN_indices])
+KAN_salary_sum # 122991504
+GNB_salary_sum = sum(NFL2020$Salary[GNB_indices])
+GNB_salary_sum # 89971759
+
+# Is there a way to block comment in R?
+# for (a in 1:length(KAN_indices))
+  # KAN_salary = KAN_indices + NFL2020$Salary[KAN_indices[a]]
+# for (a in 1:length(GNB_indices))
+  # GNB_salary = GNB_indices + NFL2020$Salary[GNB_indices[a]]
+
+# Max salary of 2 teams
+KAN_salary_max = max(NFL2020$Salary[KAN_indices])
+KAN_salary_max # $ 1.2e+07
+KAN_max_player = NFL2020$Player[which(NFL2020$Salary == KAN_salary_max)]
+KAN_max_player # Leonard Williams\\WillLe02 Chris Jones\\JoneCh09  
+GNB_salary_max = max(NFL2020$Salary[GNB_indices])
+GNB_salary_max # $ 16126000
+GNB_max_player = NFL2020$Player[which(NFL2020$Salary ==GNB_salary_max)]
+GNB_max_player # Frank Clark\\ClarFr01   Davante Adams\\AdamDa01
+
+# Mean salary of 2 teams
+KAN_salary_avg = mean(NFL2020$Salary[KAN_indices])
+KAN_salary_avg # $2277620
+GNB_salary_avg = mean(NFL2020$Salary[GNB_indices])
+GNB_salary_avg # $1428123
+
+# Histograms of salaries
+KAN_scaled = NFL2020$Salary[KAN_indices] / 1000000
+KAN_scaled = round(KAN_scaled, digits=1)
+GNB_scaled = NFL2020$Salary[GNB_indices] / 1000000
+GNB_scaled = round(GNB_scaled, digits=1)
+pdf("KAN_salaries.pdf")
+hist(KAN_scaled, 
+     breaks=5, 
+     main="KAN Salaries", 
+     xlab="KAN Player Salaries ($ .1 M)")
+dev.off()
+pdf("GNB_salaries.pdf")
+hist(GNB_scaled, 
+     breaks=5, 
+     main="GNB Salaries",
+     xlab="GNB Player Salaries ($ .1 M)")
+dev.off()
+```
+```{r}
+# Count # of unique teams in the dataset
+team_count = length(unique(NFL2020$Tm))
+team_count # 34 unique teams
+```
